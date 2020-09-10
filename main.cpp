@@ -15,9 +15,12 @@
  */
 
 #include <iostream>
+#include <chrono>
 #include "parser.h"
 #include "printer.h"
 #include "vm.h"
+
+using namespace std;
 
 int main(int argc, char** argv) {
     if (argc != 2) {
@@ -25,15 +28,21 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    std::ifstream ifile(argv[1]);
+    ifstream ifile(argv[1]);
 
     if (!ifile.is_open()) {
         cout << "Can't open input file. :(" << endl;
         exit(1);
     }
 
+    auto parseTimeStart = chrono::high_resolution_clock::now();
+
     auto program = parse(ifile);
     ifile.close();
+
+    auto parseTime = chrono::duration_cast<chrono::milliseconds>(
+        chrono::high_resolution_clock::now() - parseTimeStart
+    ).count();
 
     // For now we just print the AST
     auto visitor = new ProgramPrinter();
@@ -41,11 +50,21 @@ int main(int argc, char** argv) {
     delete visitor;
 
     cout << endl;
+    cout << "Parse time: " << parseTime << "ms" << endl << endl;
+
+    auto runTimeStart = chrono::high_resolution_clock::now();
 
     // Let's interpret the AST
     auto vm = new VM();
     program->accept(vm);
     delete vm;
+
+    auto runTime = chrono::duration_cast<chrono::milliseconds>(
+        chrono::high_resolution_clock::now() - runTimeStart
+    ).count();
+
+    cout << endl << endl;
+    cout << "Run time:   " << runTime << "ms" << endl;
 
     delete program;
 
