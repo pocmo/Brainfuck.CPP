@@ -15,3 +15,35 @@
  */
 
 #include "vm.h"
+
+VM::VM() = default;
+
+void VM::visitProgram(Program *program) {
+    for (auto statement : program->getStatements()) {
+        statement->accept(this);
+    }
+}
+
+void VM::visitMove(MoveStatement *move) {
+    this->position += move->getSteps();
+}
+
+void VM::visitChange(ChangeStatement *change) {
+    this->memory[position] += change->getValue();
+}
+
+void VM::visitPrint(PrintStatement *print) {
+    cout << this->memory[position];
+}
+
+void VM::visitRead(ReadStatement *read) {
+    cin.get(this->memory[position]);
+}
+
+void VM::visitLoop(LoopStatement *loop) {
+    while (this->memory[position] != 0) {
+        for (auto statement : loop->getBlock()) {
+            statement->accept(this);
+        }
+    }
+}

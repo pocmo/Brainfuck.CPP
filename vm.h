@@ -17,4 +17,26 @@
 #ifndef CPPBRAINFUCK_VM_H
 #define CPPBRAINFUCK_VM_H
 
+#include "ast.h"
+
+class VM : public Visitor {
+private:
+    char memory[30000] = { 0 };
+    int position = 0;
+public:
+    VM();
+
+    void visitProgram(Program *program) override;
+
+    void visitMove(MoveStatement *move) override;
+
+    void visitChange(ChangeStatement *change) override;
+
+    void visitPrint(PrintStatement *print) override;
+
+    void visitRead(ReadStatement *read) override;
+
+    void visitLoop(LoopStatement *loop) override;
+};
+
 #endif //CPPBRAINFUCK_VM_H

@@ -17,6 +17,7 @@
 #include <iostream>
 #include "parser.h"
 #include "printer.h"
+#include "vm.h"
 
 int main(int argc, char** argv) {
     if (argc != 2) {
@@ -34,9 +35,17 @@ int main(int argc, char** argv) {
     auto program = parse(ifile);
     ifile.close();
 
-    // For now we just print the AST to
+    // For now we just print the AST
     auto visitor = new ProgramPrinter();
     program->accept(visitor);
+    delete visitor;
+
+    cout << endl;
+
+    // Let's interpret the AST
+    auto vm = new VM();
+    program->accept(vm);
+    delete vm;
 
     delete program;
 
