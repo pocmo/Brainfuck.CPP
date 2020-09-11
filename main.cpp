@@ -20,6 +20,7 @@
 #include "printer.h"
 #include "vm.h"
 #include "optimize.h"
+#include "counter.h"
 
 using namespace std;
 
@@ -53,6 +54,11 @@ int main(int argc, char** argv) {
     cout << endl;
     cout << "Parse time: " << parseTime << "ms" << endl;
 
+    auto counter = new Counter();
+    program->accept(counter);
+    cout << "Statements: " << counter->getCount() << endl;
+    counter->reset();
+
     auto optimizeTimeStart = chrono::high_resolution_clock::now();
 
     auto optimizer = new Optimizer();
@@ -64,7 +70,10 @@ int main(int argc, char** argv) {
         chrono::high_resolution_clock::now() - optimizeTimeStart
     ).count();
 
-    cout << "Optimize time: " << optimizeTime << "ms" << endl << endl;
+    cout << "Optimize time: " << optimizeTime << "ms" << endl;
+
+    optimized->accept(counter);
+    cout << "Statements (optimized): " << counter->getCount() << endl << endl;
 
     auto runTimeStart = chrono::high_resolution_clock::now();
 
