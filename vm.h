@@ -37,6 +37,8 @@ public:
     void visitRead(ReadStatement *read) override;
 
     void visitLoop(LoopStatement *loop) override;
+
+    void visitClear(ClearStatement *clear) override;
 };
 
 #endif //CPPBRAINFUCK_VM_H

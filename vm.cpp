@@ -47,3 +47,7 @@ void VM::visitLoop(LoopStatement *loop) {
         }
     }
 }
+
+void VM::visitClear(ClearStatement *clear) {
+    this->memory[position] = 0;
+}

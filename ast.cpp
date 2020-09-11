@@ -85,6 +85,14 @@ void LoopStatement::accept(Visitor *visitor) {
     visitor->visitLoop(this);
 }
 
+StatementType ClearStatement::type() {
+    return CLEAR;
+}
+
+void ClearStatement::accept(Visitor *visitor) {
+    visitor->visitClear(this);
+}
+
 StatementType LoopStatement::type() {
     return LOOP;
 }

@@ -63,3 +63,7 @@ void Optimizer::visitPrint(PrintStatement *print) {
 void Optimizer::visitRead(ReadStatement *read) {
     statements.push_back(new ReadStatement());
 }
+
+void Optimizer::visitClear(ClearStatement *clear) {
+    statements.push_back(new ClearStatement());
+}

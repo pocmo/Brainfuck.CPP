@@ -39,6 +39,8 @@ public:
     void visitPrint(PrintStatement* print) override;
 
     void visitLoop(LoopStatement* loop) override;
+
+    void visitClear(ClearStatement *clear) override;
 };
 
 #endif //CPPBRAINFUCK_OPTIMIZE_H

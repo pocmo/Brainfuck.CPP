@@ -30,7 +30,8 @@ enum StatementType {
     CHANGE,
     PRINT,
     READ,
-    LOOP
+    LOOP,
+    CLEAR
 };
 
 class Statement {
@@ -98,6 +99,12 @@ public:
     void accept(Visitor* visitor) override;
 };
 
+class ClearStatement: public Statement {
+    StatementType type() override;
+
+    void accept(Visitor *visitor) override;
+};
+
 class Program {
 private:
     vector<Statement*> statements;
@@ -124,6 +131,8 @@ public:
     virtual void visitPrint(PrintStatement* print) = 0;
 
     virtual void visitLoop(LoopStatement* loop) = 0;
+
+    virtual void visitClear(ClearStatement* clear) = 0;
 };
 
 

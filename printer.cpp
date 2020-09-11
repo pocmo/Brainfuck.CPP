@@ -80,3 +80,8 @@ void ProgramPrinter::visitLoop(LoopStatement *loop) {
     indent();
     cout << "}" << endl;
 }
+
+void ProgramPrinter::visitClear(ClearStatement *clear) {
+    indent();
+    cout << "clear()" << endl;
+}
