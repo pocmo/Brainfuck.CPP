@@ -19,6 +19,7 @@
 #include "parser.h"
 #include "printer.h"
 #include "vm.h"
+#include "optimize.h"
 
 using namespace std;
 
@@ -50,13 +51,26 @@ int main(int argc, char** argv) {
     delete visitor;
 
     cout << endl;
-    cout << "Parse time: " << parseTime << "ms" << endl << endl;
+    cout << "Parse time: " << parseTime << "ms" << endl;
+
+    auto optimizeTimeStart = chrono::high_resolution_clock::now();
+
+    auto optimizer = new Optimizer();
+    program->accept(optimizer);
+    auto optimized = optimizer->createOptimizedProgram();
+    delete program;
+
+    auto optimizeTime = chrono::duration_cast<chrono::milliseconds>(
+        chrono::high_resolution_clock::now() - optimizeTimeStart
+    ).count();
+
+    cout << "Optimize time: " << optimizeTime << "ms" << endl << endl;
 
     auto runTimeStart = chrono::high_resolution_clock::now();
 
     // Let's interpret the AST
     auto vm = new VM();
-    program->accept(vm);
+    optimized->accept(vm);
     delete vm;
 
     auto runTime = chrono::duration_cast<chrono::milliseconds>(
@@ -66,7 +80,7 @@ int main(int argc, char** argv) {
     cout << endl << endl;
     cout << "Run time:   " << runTime << "ms" << endl;
 
-    delete program;
+    delete optimized;
 
     return 0;
 }
