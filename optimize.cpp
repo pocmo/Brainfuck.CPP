@@ -39,8 +39,21 @@ void Optimizer::visitProgram(Program *program) {
 }
 
 void Optimizer::visitLoop(LoopStatement *loop) {
+    vector<Statement*> block = loop->getBlock();
+
+    // Optimizing a [-] loop to ClearStatement()
+    if (block.size() == 1 && block[0]->type() == CHANGE) {
+        auto* change = dynamic_cast<ChangeStatement*>(block[0]);
+        if (change->getValue() == -1) {
+            statements.push_back(new ClearStatement());
+            return;
+        }
+    }
+
+    // Keeping loop and trying to optimize statements inside loop
     auto loopOptimizer = new Optimizer();
-    for (auto statement : loop->getBlock()) {
+
+    for (auto statement : block) {
         statement->accept(loopOptimizer);
     }
 
