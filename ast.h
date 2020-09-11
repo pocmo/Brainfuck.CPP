@@ -25,8 +25,18 @@ using namespace std;
 // Forward declaration of Visitor so that statements can reference it and Visitor can reference the statements.
 class Visitor;
 
+enum StatementType {
+    MOVE,
+    CHANGE,
+    PRINT,
+    READ,
+    LOOP
+};
+
 class Statement {
 public:
+    virtual StatementType type() = 0;
+
     virtual void accept(Visitor* visitor) = 0;
 
     virtual ~Statement() = default;
@@ -37,6 +47,8 @@ private:
     int steps;
 
 public:
+    StatementType type() override;
+
     explicit MoveStatement(int steps);
 
     int getSteps();
@@ -49,6 +61,8 @@ private:
     int value;
 
 public:
+    StatementType type() override;
+
     explicit ChangeStatement(int value);
 
     int getValue();
@@ -57,10 +71,14 @@ public:
 };
 
 class PrintStatement: public Statement {
+    StatementType type() override;
+
     void accept(Visitor* visitor) override;
 };
 
 class ReadStatement: public Statement {
+    StatementType type() override;
+
     void accept(Visitor* visitor) override;
 };
 
@@ -69,6 +87,8 @@ private:
     vector<Statement*> block;
 
 public:
+    StatementType type() override;
+
     void addToBlock(Statement* statement);
 
     vector<Statement*> getBlock();

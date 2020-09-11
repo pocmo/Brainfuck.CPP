@@ -31,6 +31,10 @@ int MoveStatement::getSteps() {
     return steps;
 }
 
+StatementType MoveStatement::type() {
+    return MOVE;
+}
+
 ChangeStatement::ChangeStatement(int value) {
     this->value = value;
 }
@@ -43,12 +47,24 @@ int ChangeStatement::getValue() {
     return value;
 }
 
+StatementType ChangeStatement::type() {
+    return CHANGE;
+}
+
 void PrintStatement::accept(Visitor *visitor) {
     visitor->visitPrint(this);
 }
 
+StatementType PrintStatement::type() {
+    return PRINT;
+}
+
 void ReadStatement::accept(Visitor *visitor) {
     visitor->visitRead(this);
+}
+
+StatementType ReadStatement::type() {
+    return READ;
 }
 
 LoopStatement::~LoopStatement() {
@@ -67,6 +83,10 @@ vector<Statement*> LoopStatement::getBlock() {
 
 void LoopStatement::accept(Visitor *visitor) {
     visitor->visitLoop(this);
+}
+
+StatementType LoopStatement::type() {
+    return LOOP;
 }
 
 void Program::addStatement(Statement *statement) {
